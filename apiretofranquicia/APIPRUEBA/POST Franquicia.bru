@@ -1,0 +1,30 @@
+meta {
+  name: POST Franquicia
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/api/franquicias
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "nombre": "Franquiciaejemplo7",
+      "sucursales": [
+          {
+              "nombre":"franquiciacentr13",
+              "productos": [
+                  {
+                      "nombre":"Pc 7",
+                      "stock": 1
+  
+                  }
+              ]
+  
+          }
+      ]
+  }
+}
