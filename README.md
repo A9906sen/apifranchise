@@ -19,3 +19,60 @@ Esta es una API desarrollada en **Java con Spring Boot** para la gestión de fra
 graph TD
     A[Franquicia] --> B[Sucursal]
     B --> C[Producto]
+
+classDiagram
+class FranquiciaController {
+<<RestController>>
++addFranquicia(Franquicia) ResponseEntity<Franquicia>
++getAllFranquicias() ResponseEntity<List<Franquicia>>
++addSucursal(String, Sucursal) ResponseEntity<Sucursal>
++addProducto(String, String, Producto) ResponseEntity<Producto>
++actualizarStock(String, String, String, Map~String,Integer~) ResponseEntity<Producto>
++eliminarProducto(String, String, String) ResponseEntity~Void~
+}
+
+class FranquiciaService {
+<<Interface>>
++addFranquicia(Franquicia) Franquicia
++getAllFranquicias() List<Franquicia>
++addSucursal(String, Sucursal) Sucursal
++addProducto(String, String, Producto) Producto
++actualizarStock(String, String, String, int) Optional<Producto>
++eliminarProducto(String, String, String) boolean
+}
+
+class FranquiciaServiceImpl {
+-repository: IFranquiciaRepository
++actualizarStock(...) Optional<Producto>
++eliminarProducto(...) boolean
+}
+
+class FranquiciaMongoRepository {
+-mongoTemplate: MongoTemplate
++save(Franquicia) Franquicia
++findAll() List<Franquicia>
++actualizarStock(...) Optional<Producto>
+}
+
+class Franquicia {
+-String id
+-String nombre
+-List~Sucursal~ sucursales
+}
+
+class Sucursal {
+-String nombre
+-List~Producto~ productos
+}
+
+class Producto {
+-String nombre
+-Integer stock
+}
+
+FranquiciaController --> FranquiciaService
+FranquiciaService <|.. FranquiciaServiceImpl
+FranquiciaServiceImpl --> IFranquiciaRepository
+IFranquiciaRepository <|.. FranquiciaMongoRepository
+Franquicia "1" *-- "*" Sucursal
+Sucursal "1" *-- "*" Producto
