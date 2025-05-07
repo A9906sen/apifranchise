@@ -1,5 +1,6 @@
 package com.reto.apiretofranquicia.Adapter.Persistence.Mongodb;
 
+import com.reto.apiretofranquicia.Application.DTO.ProductoConSucursal;
 import com.reto.apiretofranquicia.Domain.Model.Franquicia;
 import com.reto.apiretofranquicia.Domain.Model.Producto;
 import com.reto.apiretofranquicia.Domain.Model.Sucursal;
@@ -10,8 +11,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class MongoFranquiciaRepository implements IFranquiciaRepository {
@@ -94,4 +98,23 @@ public class MongoFranquiciaRepository implements IFranquiciaRepository {
         return null;
     }
 
+    @Override
+    public List<ProductoConSucursal> findMaxStockPorSucursal(String nombreFranquicia) {
+        Franquicia franquicia = mongoTemplate.findOne(
+                Query.query(Criteria.where("nombre").is(nombreFranquicia)),
+                Franquicia.class
+        );
+
+        if (franquicia == null) return List.of();
+
+        return franquicia.getSucursales().stream()
+                .map(sucursal -> {
+                    Producto maxProducto = sucursal.getProductos().stream()
+                            .max(Comparator.comparingInt(Producto::getStock))
+                            .orElse(null);
+                    return maxProducto != null ? new ProductoConSucursal(maxProducto.getNombre(), maxProducto.getStock(), sucursal.getNombre()) : null;
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 }

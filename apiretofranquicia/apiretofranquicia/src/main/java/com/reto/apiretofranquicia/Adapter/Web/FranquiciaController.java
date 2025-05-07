@@ -1,5 +1,6 @@
 package com.reto.apiretofranquicia.Adapter.Web;
 
+import com.reto.apiretofranquicia.Application.DTO.ProductoConSucursal;
 import com.reto.apiretofranquicia.Domain.Model.Franquicia;
 import com.reto.apiretofranquicia.Domain.Model.Producto;
 import com.reto.apiretofranquicia.Domain.Model.Sucursal;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/franquicias")
@@ -96,5 +95,14 @@ public class FranquiciaController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(productoActualizado);
+    }
+
+    @GetMapping("/{nombreFranquicia}/productos-mayor-stock")
+    public ResponseEntity<List<ProductoConSucursal>> getMaxStockPorSucursal(@PathVariable String nombreFranquicia) {
+        List<ProductoConSucursal> productos = franquiciaService.getMaxStockPorSucursal(nombreFranquicia);
+        if (productos.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productos);
     }
 }
