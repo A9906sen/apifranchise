@@ -1,20 +1,20 @@
 package com.reto.apiretofranquicia.Domain.Model;
 
 public class Producto {
-    private String name;
+    private String nombre;
     private int stock;
 
-    public Producto(String name, int stock) {
-        this.name = name;
+    public Producto(String nombre, int stock) {
+        this.nombre = nombre;
         this.stock = stock;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public int getStock() {
