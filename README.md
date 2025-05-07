@@ -17,6 +17,8 @@ Esta es una API desarrollada en **Java con Spring Boot** para la gestión de **f
   
   **En application.properties se indica las dos formas de conectarse, ya sea por mongo db atlas o compass**
 
+  link documentación endpoints: https://myoffice.accenture.com/personal/andrea_c_peralta_accenture_com/_layouts/15/download.aspx?UniqueId=31df47fb389746ecbdd2526511fe5898&e=oJ8Iss
+
 ```mermaid
 classDiagram
 class Franquicia {
