@@ -7,6 +7,7 @@ import com.reto.apiretofranquicia.Domain.Ports.input.IFranquiciaService;
 import com.reto.apiretofranquicia.Domain.Ports.output.IFranquiciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -32,5 +33,15 @@ public class FranquiciaServiceImpl implements IFranquiciaService {
     @Override
     public Producto addProducto(String nombreFranquicia, String nombreSucursal, Producto producto) {
         return repository.addProducto(nombreFranquicia, nombreSucursal, producto);
+    }
+
+    @Override
+    public boolean deleteProducto(String nombreFranquicia, String nombreSucursal, String nombreProducto) {
+        return repository.deleteProducto(nombreFranquicia, nombreSucursal, nombreProducto);
+    }
+
+    @Override
+    public Producto updateStock(String nombreFranquicia, String nombreSucursal, String nombreProducto, int nuevoStock) {
+        return repository.updateStock(nombreFranquicia, nombreSucursal, nombreProducto, nuevoStock);
     }
 }

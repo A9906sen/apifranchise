@@ -4,6 +4,7 @@ import com.reto.apiretofranquicia.Domain.Model.Franquicia;
 import com.reto.apiretofranquicia.Domain.Model.Producto;
 import com.reto.apiretofranquicia.Domain.Model.Sucursal;
 import com.reto.apiretofranquicia.Domain.Ports.output.IFranquiciaRepository;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -58,4 +59,39 @@ public class MongoFranquiciaRepository implements IFranquiciaRepository {
                 )
         );
     }
+
+    @Override
+    public boolean deleteProducto(String nombreFranquicia, String nombreSucursal, String nombreProducto) {
+        Query query = Query.query(
+                Criteria.where("nombre").is(nombreFranquicia)
+                        .and("sucursales.nombre").is(nombreSucursal)
+        );
+        Update update = new Update().pull("sucursales.$.productos", new Document("nombre", nombreProducto));
+        return mongoTemplate.updateFirst(query, update, Franquicia.class).getModifiedCount() > 0;
+    }
+
+    @Override
+    public Producto updateStock(String nombreFranquicia, String nombreSucursal, String nombreProducto, int nuevoStock) {
+        Franquicia franquicia = mongoTemplate.findOne(
+                Query.query(Criteria.where("nombre").is(nombreFranquicia)),
+                Franquicia.class
+        );
+
+        if (franquicia == null) return null;
+
+        for (Sucursal sucursal : franquicia.getSucursales()) {
+            if (sucursal.getNombre().equalsIgnoreCase(nombreSucursal)) {
+                for (Producto producto : sucursal.getProductos()) {
+                    if (producto.getNombre().equalsIgnoreCase(nombreProducto)) {
+                        producto.setStock(nuevoStock);
+                        mongoTemplate.save(franquicia);
+                        return producto;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
 }

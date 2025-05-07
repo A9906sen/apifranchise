@@ -12,4 +12,6 @@ public interface IFranquiciaRepository {
     Sucursal addSucursal(String nombreFranquicia, Sucursal sucursal);
     Producto addProducto(String nombreFranquicia, String nombreSucursal, Producto producto);
     Optional<Franquicia> findByName(String nombre);
+    boolean deleteProducto(String nombreFranquicia, String nombreSucursal, String nombreProducto);
+    Producto updateStock(String nombreFranquicia, String nombreSucursal, String nombreProducto, int nuevoStock);
 }
